@@ -3,11 +3,11 @@ macro "Batch Measure" {
     list = getFileList(dir);
     setBatchMode(true);
     for (i = 0; i < list.length; i++){
- 		    open(list[i]);
+ 		open(list[i]);
  	    	title=getTitle();
-        run("Copy");
-	      run("Internal Clipboard");
-        selectWindow(title);
+        	run("Copy");
+	        run("Internal Clipboard");
+	 	selectWindow(title);
 	    	run("Split Channels");
 	    	selectWindow("Clipboard");
 	    	run("Make Binary");
