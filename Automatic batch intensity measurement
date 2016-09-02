@@ -1,0 +1,35 @@
+macro "Batch Measure" {
+    dir = getDirectory("Choose a Directory ");
+    list = getFileList(dir);
+    setBatchMode(true);
+    for (i = 0; i < list.length; i++){
+ 		    open(list[i]);
+ 	    	title=getTitle();
+        run("Copy");
+	      run("Internal Clipboard");
+        selectWindow(title);
+	    	run("Split Channels");
+	    	selectWindow("Clipboard");
+	    	run("Make Binary");
+	    	run("Analyze Particles...", "  show=[Count Masks] add");
+	    	selectWindow(title+" (red)");
+	    	run("Set Measurements...", "area mean min nan redirect=None decimal=3");
+	    	roiManager("Select", 0);
+	    	roiManager("Deselect");
+	    	roiManager("Measure");
+	    	saveAs("Results", "/Users/lab-public/Desktop/" + title + ".xls");
+	    	roiManager("Deselect");
+	    	roiManager("Delete");
+	    	selectWindow("Results");
+	    	run("Close");
+	    	selectWindow("Count Masks of Clipboard");
+	    	close();
+	    	selectWindow("Clipboard");
+	    	close();
+	    	selectWindow(title+" (blue)");
+	    	close();
+	    	selectWindow(title+" (green)");
+	    	close();
+	    	run("Close");
+    }
+}
