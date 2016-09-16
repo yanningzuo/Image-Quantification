@@ -1,0 +1,31 @@
+//Copyright@YanningZuo
+//To cite, please link to my Github repository
+run("Copy");
+run("Internal Clipboard");
+run("Bandpass Filter...", "filter_large=60 filter_small=3 suppress=None tolerance=5 autoscale saturate");
+run("Copy");
+run("Internal Clipboard");
+run("Mean...", "radius=1000");
+selectWindow("Clipboard-1");
+imageCalculator("Subtract create", "Clipboard-1","Clipboard-2");
+selectWindow("Result of Clipboard-1");
+run("Copy");
+run("Internal Clipboard");
+selectWindow("Clipboard-3");
+run("Trainable Weka Segmentation");
+selectWindow("Trainable Weka Segmentation v3.1.2");
+call("trainableSegmentation.Weka_Segmentation.loadClassifier", "C:\\Users\\HongLabUser\\Desktop\\Green.model");
+call("trainableSegmentation.Weka_Segmentation.getProbability");
+selectWindow("Probability maps");
+run("Copy");
+run("Internal Clipboard");
+selectWindow("Clipboard-4");
+setAutoThreshold("Default dark");
+run("Threshold...");
+run("NaN Background");
+run("Make Binary");
+run("Watershed");
+roiManager("Measure");
+run("Analyze Particles...", "size=80-Infinity show=Outlines display clear summarize");
+//Copyright@YanningZuo
+//To cite, please link to my Github repository
