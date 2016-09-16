@@ -1,0 +1,60 @@
+//Copyright@YanningZuo
+//To cite, please link to my Github repository
+run("Copy");
+run("Internal Clipboard");
+run("Bandpass Filter...", "filter_large=60 filter_small=3 suppress=None tolerance=5 autoscale saturate"); //Averaging the background
+run("Copy");
+run("Internal Clipboard");
+run("Mean...", "radius=1000");
+selectWindow("Clipboard-1");
+imageCalculator("Subtract create", "Clipboard-1","Clipboard-2"); //Substract the background
+selectWindow("Result of Clipboard-1");
+run("Copy");
+run("Internal Clipboard");
+//Here's the thresholding part
+setOption("BlackBackground", false);
+min=newArray(3);
+max=newArray(3);
+filter=newArray(3);
+a=getTitle();
+run("HSB Stack");
+run("Convert Stack to Images");
+selectWindow("Hue");
+rename("0");
+selectWindow("Saturation");
+rename("1");
+selectWindow("Brightness");
+rename("2");
+min[0]=0;
+max[0]=255;
+filter[0]="pass";
+min[1]=0;
+max[1]=255;
+filter[1]="pass";
+min[2]=29;
+max[2]=255;
+filter[2]="pass";
+for (i=0;i<3;i++){
+  selectWindow(""+i);
+  setThreshold(min[i], max[i]);
+  run("Convert to Mask");
+  if (filter[i]=="stop")  run("Invert");
+}
+imageCalculator("AND create", "0","1");
+imageCalculator("AND create", "Result of 0","2");
+for (i=0;i<3;i++){
+  selectWindow(""+i);
+  close();
+}
+selectWindow("Result of 0");
+close();
+selectWindow("Result of Result of 0");
+rename(a);
+setOption("BlackBackground", false);
+run("Make Binary");
+run("Watershed");
+run("Watershed");
+roiManager("Measure");
+run("Analyze Particles...", "size=80-Infinity show=Outlines display clear summarize"); //Cell counting
+//Copyright@YanningZuo
+//To cite, please link to my Github repository
