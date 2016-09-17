@@ -8,17 +8,16 @@ macro "Batch Measure" {
         	run("Copy");
 	        run("Internal Clipboard");
 	 	selectWindow(title);
-	    	run("Split Channels"); //In this task, blue channel is dapi and red channel is the cytosol protein we want to quantify
+	    	run("Split Channels"); 
 	    	selectWindow("Clipboard");
 	    	run("Make Binary");
-	    	run("Analyze Particles...", "  show=[Count Masks] add"); //Here each cell is set as an ROI
-	    	selectWindow(title+" (red)");
+	    	run("Analyze Particles...", "  show=[Count Masks] add"); 
+	    	selectWindow(title+" (red)")
 	    	run("Set Measurements...", "area mean min nan redirect=None decimal=3");
 	    	roiManager("Select", 0);
-	    	roiManager("Deselect"); //Deselect = select all ROI
+	    	roiManager("Deselect"); 
 	    	roiManager("Measure");
-	    	saveAs("Results", "/Users/lab-public/Desktop/" + title + ".xls"); // Results are just on the desktop!
-	    	// Below is for cleaning up ROI and results for the next image
+	    	saveAs("Results", "/Users/lab-public/Desktop/" + title + ".xls");
 	    	roiManager("Deselect");
 	    	roiManager("Delete");
 	    	selectWindow("Results");
